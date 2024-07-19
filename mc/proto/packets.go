@@ -39,3 +39,7 @@ const (
 type ClientCommandRequest struct {
 	ActionID ClientCommandActionEnum
 }
+
+type ReceivePlayerDisconnect struct {
+	Reason String
+}

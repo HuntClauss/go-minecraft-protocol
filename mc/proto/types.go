@@ -16,7 +16,8 @@ type (
 	UShort uint16
 	String string
 	Bool   bool
-	Byte   byte
+	Byte   int8
+	UByte  uint8
 	Uuid   [2]uint64
 	Long   int64
 	Float  float32
@@ -207,7 +208,7 @@ func (b *Bool) ReadFrom(r io.Reader) (int64, error) {
 }
 
 func (b *Byte) WriteTo(w io.Writer) (int64, error) {
-	return int64Wrap(w.Write([]byte{byte(*b)}))
+	return int64Wrap(w.Write([]byte{byte(int8(*b))}))
 }
 
 func (b *Byte) ReadFrom(r io.Reader) (int64, error) {
@@ -217,6 +218,20 @@ func (b *Byte) ReadFrom(r io.Reader) (int64, error) {
 	}
 
 	*b = Byte(buf[0])
+	return 1, nil
+}
+
+func (b *UByte) WriteTo(w io.Writer) (int64, error) {
+	return int64Wrap(w.Write([]byte{byte(*b)}))
+}
+
+func (b *UByte) ReadFrom(r io.Reader) (int64, error) {
+	buf := make([]byte, 1)
+	if n, err := int64Wrap(r.Read(buf)); err != nil {
+		return n, err
+	}
+
+	*b = UByte(buf[0])
 	return 1, nil
 }
 

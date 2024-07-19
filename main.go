@@ -19,11 +19,10 @@ func main() {
 	}
 
 	client := mc.NewClient(mc.Version1_20_1)
-	defer client.Close()
-
 	if err := client.Connect(server); err != nil {
 		log.Fatalf("cannot connect to server: %v\n", err)
 	}
+	defer client.Close()
 
 	go client.HandleResponses()
 

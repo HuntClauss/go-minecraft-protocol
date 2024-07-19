@@ -217,6 +217,7 @@ func (c *Client) handlePlayStateResponses(pk proto.Packet) error {
 		c.handleSetHealthPacket(pk)
 	case 0x1a:
 		// https://wiki.vg/Protocol#Disconnect_(play)
+		c.handleDisconnect(pk)
 	case 0x23: // keep alive
 		log.Printf("[INFO] Recv: %#x (keep alive packet)", pk.ID)
 		return c.HandleKeepAlivePacket(pk)
@@ -279,6 +280,9 @@ func (c *Client) handlePlayStateResponses(pk proto.Packet) error {
 	// https://wiki.vg/index.php?title=Protocol&oldid=18375#Respawn
 	case 0x64:
 	// https://wiki.vg/index.php?title=Protocol&oldid=18375#Respawn#System_Chat_Message
+	case 0x1f:
+		// https://wiki.vg/index.php?title=Protocol&oldid=18375#Game_Event
+		return c.handleGameEvent(pk)
 	default:
 		return fmt.Errorf("unknown packet id in play state: %#x", pk.ID)
 	}
